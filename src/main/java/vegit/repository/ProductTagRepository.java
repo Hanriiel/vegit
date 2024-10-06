@@ -1,4 +1,4 @@
-package repository;
+package vegit.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
