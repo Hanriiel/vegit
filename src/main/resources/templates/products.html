@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tuotteet</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Vegaaniset tuotteet</h1>
+        <a href="/">Etusivulle</a>
+    </header>
+
+    <main>
+        <section>
+            <h2>Tuotteet</h2>
+            <ul>
+                <li th:each="product : ${products}">
+                    <h3 th:text="${product.productName}">Tuotteen nimi</h3>
+                    <p><strong>Merkki:</strong> <span th:text="${product.brand}">Merkki</span></p>
+                    <p><strong>Kuvaus:</strong> <span th:text="${product.description}">Kuvaus</span></p>
+                    <p><strong>Ainesosat:</strong> <span th:text="${product.ingredients}">Ainesosat</span></p>
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Lisää uusi tuote</h2>
+            <form action="/submitProduct" method="post">
+                <label for="name">Tuotteen nimi:</label>
+                <input type="text" id="name" name="name" required>
+                <br>
+                <label for="brand">Merkki:</label>
+                <input type="text" id="brand" name="brand" required>
+                <br>
+                <label for="description">Kuvaus:</label>
+                <textarea id="description" name="description" required></textarea>
+                <br>
+                <label for="ingredients">Ainesosat:</label>
+                <textarea id="ingredients" name="ingredients" required></textarea>
+                <br>
+                <button type="submit">Tallenna</button>
+            </form>
+        </section>
+    </main>
+
+    <section>
+        <h2>Tuotearvostelut</h2>
+        <ul>
+            <li th:each="review : ${reviews}">
+                <p><strong>Arvosana:</strong> <span th:text="${review.rating}"></span></p>
+                <p><strong>Kommentti:</strong> <span th:text="${review.comment}"></span></p>
+            </li>
+        </ul>
+    </section>
+    
+
+    <footer>
+        <p>&copy; 2024 Vegit - All rights reserved.</p>
+    </footer>
+</body>
+</html>

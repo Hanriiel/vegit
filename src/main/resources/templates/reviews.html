@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Arvostelut</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Arvostelut</h1>
+        <a href="/">Etusivulle</a>
+    </header>
+
+    <main>
+        <section>
+            <h2>Arvostelut</h2>
+            <ul>
+                <li th:each="review : ${reviews}" th:text="${review}"></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Uusi arvostelu</h2>
+            <form action="/submitReview" method="post">
+                <label for="rating">Arvosana (1-5):</label>
+                <input type="number" id="rating" name="rating" min="1" max="10">
+                <br>
+                <label for="comment">Kommentit:</label>
+                <textarea id="comment" name="comment"></textarea>
+                <br>
+                <button type="submit">Tallenna</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Vegit - All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -30,7 +30,7 @@ public class Product {
     @Column(name="description")
     private String description;
 
-    @Column(name="ingredients")
+    @Column(name="ingredients", columnDefinition = "TEXT")
     private String ingredients;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
