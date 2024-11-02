@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import vegit.domain.Recipe;
+import vegit.exception.ResourceNotFoundException;
 import vegit.repository.RecipeRepository;
 
 @RestController
@@ -29,30 +31,36 @@ public class RecipeRestController {
 
     @GetMapping("/{id}")
     public Recipe getRecipeById(@PathVariable Long id) {
-        return recipeRepository.findById(id).orElse(null);
+        return recipeRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Reseptiä ei löydy id:llä " + id));
     }
 
+
     @PostMapping
-    public Recipe createRecipe(@RequestBody Recipe newRecipe) {
+    public Recipe createRecipe(@Valid @RequestBody Recipe newRecipe) {
         return recipeRepository.save(newRecipe);
     }
 
     @PutMapping("/{id}")
-    public Recipe updateRecipe(@PathVariable Long id, @RequestBody Recipe updatedRecipe) {
-        Recipe recipe = recipeRepository.findById(id).orElse(null);
-        if (recipe != null) {
-            recipe.setRecipeTitle(updatedRecipe.getRecipeTitle());
-            recipe.setIngredients(updatedRecipe.getIngredients());
-            recipe.setInstructions(updatedRecipe.getInstructions());
-            recipe.setPrepTime(updatedRecipe.getPrepTime());
-            recipe.setServings(updatedRecipe.getServings());
-            return recipeRepository.save(recipe);
-        }
-        return null;
+    public Recipe updateRecipe(@PathVariable Long id, @Valid @RequestBody Recipe updatedRecipe) {
+        Recipe recipe = recipeRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Reseptiä ei löydy id:llä " + id));
+
+        recipe.setRecipeTitle(updatedRecipe.getRecipeTitle());
+        recipe.setIngredients(updatedRecipe.getIngredients());
+        recipe.setInstructions(updatedRecipe.getInstructions());
+        recipe.setPrepTime(updatedRecipe.getPrepTime());
+        recipe.setServings(updatedRecipe.getServings());
+        return recipeRepository.save(recipe);
     }
 
     @DeleteMapping("/{id}")
     public void deleteRecipe(@PathVariable Long id) {
+        if (!recipeRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Reseptiä ei löydy id:llä " + id);
+        }
         recipeRepository.deleteById(id);
     }
+
+    
 }

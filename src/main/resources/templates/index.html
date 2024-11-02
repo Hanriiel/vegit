@@ -6,28 +6,33 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <header>
-        <h1>Vegit</h1>
-        <p>Tervetuloa vegaaniruokien värikkääseen maailmaan</p>
+    <header style="display: flex; justify-content: space-between; align-items: center;">   
+        <div style="flex-grow: 1; text-align: center;">
+            <h1>Tervetuloa vegaaniruokien värikkääseen maailmaan</h1>
+        </div>
+        <form class="logout-form" th:action="@{/logout}" method="post" style="margin-left: auto;">
+            <input type="submit" value="Logout" class="logout-button" />
+        </form>
     </header>
 
     <nav>
         <ul>
             <li><a href="/products">Tuotteet</a></li>
             <li><a href="/recipes">Reseptit</a></li>
-            <li><a href="/reviews">Arvostelut</a></li>
         </ul>
     </nav>
 
     <main>
-        <section>
-            <h2>Vegaanituotteet</h2>
-            <p>Tutustu vegaanisiin tuotteisiin</p>
+        <section class="products-section">
+            <h2>Vegetuotteet</h2>
+            <p>Tutustu markkinoilla oleviin kasvistuotteisiin</p>
+            <a href="/products" class="btn">Tuotteet</a>
         </section>
 
-        <section>
-            <h2>Vegaaniset reseptit</h2>
-            <p>Löydä uusia reseptejä</p>
+        <section class="recipes-section">
+            <h2>Reseptit</h2>
+            <p>Löydä uutta inspiraatiota kasviskeittiöön</p>
+            <a href="/recipes" class="btn">Reseptit</a>
         </section>
     </main>
 

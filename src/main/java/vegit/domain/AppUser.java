@@ -2,12 +2,9 @@ package vegit.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,31 +12,24 @@ import jakarta.persistence.Table;
 public class AppUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    @Column(name="user_id", nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name="username", unique = true)
+    @Column(name = "username", unique = true)
     private String username;
 
-    @Column(name= "passwordhash" ,nullable = false)
+    @Column(name = "passwordhash", nullable = false)
     private String passwordHash;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
+    @Column(name = "role", nullable = false)
+    private String role; 
 
-    public AppUser(String username, String passwordHash, Role role) {
+    public AppUser() {}
+
+    public AppUser(String username, String passwordHash, String role) {
         this.username = username;
         this.passwordHash = passwordHash;
-        this.role = role;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -47,8 +37,8 @@ public class AppUser {
         return id;
     }
 
-    public void setUserId(Long userId) {
-        this.id = userId;
+    public void setUserId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -67,5 +57,11 @@ public class AppUser {
         this.passwordHash = passwordHash;
     }
 
-    
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

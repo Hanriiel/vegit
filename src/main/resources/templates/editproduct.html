@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Muokkaa tuotetta</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+    <h1>Muokkaa tuotteen tietoja</h1>
+    <div class="form-container">
+        <form action="#" th:action="@{/saveEditedProduct}" th:object="${product}" method="post">
+            <input type="hidden" name="_method" value="put" />
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="form-group">
+                <label>Tuotteen nimi</label>
+                <input type="text" th:field="*{productName}" required />
+            </div>
+
+            <div class="form-group">
+                <label>Merkki</label>
+                <input type="text" th:field="*{brand}" required />
+            </div>
+
+            <div class="form-group">
+                <label>Kuvaus</label>
+                <textarea th:field="*{description}" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Ainesosat</label>
+                <textarea th:field="*{ingredients}" required></textarea>
+            </div>
+
+            <div class="submit-container">
+                <input type="submit" value="Tallenna"></input>
+                <button type="button" onclick="window.location.href='/products'">Peruuta</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

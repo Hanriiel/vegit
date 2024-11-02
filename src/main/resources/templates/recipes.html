@@ -1,50 +1,58 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Reseptit</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
     <header>
         <h1>Vegaaniset reseptit</h1>
-        <a href="/">Etusivulle</a>
+        <a href="/" class="btn">Etusivulle</a>
+        <form class="logout-form" th:action="@{/logout}" method="post">
+            <input type="submit" value="Logout" class="logout-button" />
+        </form>
     </header>
 
     <main>
         <section>
             <h2>Reseptit</h2>
+
+            <button sec:authorize="hasAuthority('ROLE_ADMIN')" onclick="location.href='addrecipe'">Lisää uusi resepti</button>
+
             <ul>
                 <li th:each="recipe : ${recipes}">
                     <h3 th:text="${recipe.recipeTitle}">Reseptin nimi</h3>
                     <p><strong>Ainekset:</strong> <span th:text="${recipe.ingredients}">Ainekset </span></p>
                     <p><strong>Valmistus:</strong> <span th:text="${recipe.instructions}">Ohjeet</span></p>
-                    <p th:text="'Valmistusaika (min): ' + ${recipe.prepTime} + ' minutes'"></p>
+                    <p th:text="'Valmistusaika: ' + ${recipe.prepTime} + ' minuuttia'"></p>
                     <p th:text="'Annokset: ' + ${recipe.servings}"></p>
+
+                    <hr class="review-divider">
+                    <h4>Arvostelut:</h4>
+                    <div class="review-item" th:each="review : ${reviewsMap[recipe.id]}">
+                        <p><strong>Käyttäjä:</strong> <span th:text="${review.appUser.username}">Käyttäjänimi</span></p>
+                        <p><strong>Arvosana:</strong> <span th:text="${review.rating}">Arvosana</span></p>
+                        <p><strong>Kommentti:</strong> <span th:text="${review.comment}">Kommentti</span></p>
+
+                        <button 
+                            sec:authorize="hasAuthority('ROLE_ADMIN')" 
+                            th:onclick="|if(confirm('Oletko varma, että haluat poistaa arvostelun?')) location.href='/deleterecipereview/' + ${review.id};|">
+                            Poista arvostelu
+                        </button>
+                        
+                    </div>
+
+                    <button sec:authorize="hasAuthority('ROLE_ADMIN')" th:onclick="|location.href='/editrecipe/' + ${recipe.id}|">Muokkaa reseptiä</button>
+                    <button sec:authorize="hasAuthority('ROLE_ADMIN')" 
+                        th:onclick="|if(confirm('Oletko varma, että haluat poistaa reseptin?')) location.href='/deleterecipe/' + ${recipe.id};|">
+                        Poista resepti
+                    </button>
+
+                    <button th:onclick="|location.href='/addrecipereview/' + ${recipe.id}|">Lisää arvostelu</button>
                 </li>
             </ul>
-        </section>
-
-        <section>
-            <h2>Uusi resepti</h2>
-            <form action="/submitRecipe" method="post">
-                <label for="title">Reseptin nimi:</label>
-                <input type="text" id="title" name="recipe_title" required>
-                <br>
-                <label for="ingredients">Ainekset:</label>
-                <textarea id="ingredients" name="ingredients"></textarea>
-                <br>
-                <label for="instructions">Ohjeet:</label>
-                <textarea id="instructions" name="instructions"></textarea>
-                <br>
-                <label for="prepTime">Valmistusaika (min):</label>
-                <input type="number" id="prepTime" name="prep_time">
-                <br>
-                <label for="servings">Annokset:</label>
-                <input type="number" id="servings" name="servings">
-                <br>
-                <button type="submit">Tallenna</button>
-            </form>
         </section>
     </main>
 

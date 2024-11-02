@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lisää uusi resepti</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+    <h1>Lisää uusi resepti</h1>
+    <div>
+        <form th:object="${recipe}" th:action="@{/saverecipe}" method="post">
+            <div>
+                <label>Reseptin nimi</label>
+                <input type="text" th:field="*{recipeTitle}" required />
+                <div th:if="${#fields.hasErrors('recipeTitle')}" th:errors="*{recipeTitle}">Virhe</div>
+            </div>
+
+            <div>
+                <label>Ainesosat</label>
+                <textarea th:field="*{ingredients}" required></textarea>
+                <div th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}">Virhe</div>
+            </div>
+
+            <div>
+                <label>Valmistusohjeet</label>
+                <textarea th:field="*{instructions}" required></textarea>
+                <div th:if="${#fields.hasErrors('instructions')}" th:errors="*{instructions}">Virhe</div>
+            </div>
+
+            <div>
+                <label>Valmistusaika (min)</label>
+                <input type="number" th:field="*{prepTime}" min="1" step="1" required />
+                <div th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}">Virhe</div>
+            </div>
+
+            <div>
+                <label>Annoksia</label>
+                <input type="number" th:field="*{servings}" min="1" step="1" required />
+                <div th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}">Virhe</div>
+            </div>
+
+
+            <input type="submit" value="Tallenna" />
+            <button type="button" onclick="window.location.href='/recipes'">Peruuta</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,59 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Tuotteet</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
-    <header>
+    <header style="display: flex; justify-content: space-between; align-items: center;">    
         <h1>Vegaaniset tuotteet</h1>
-        <a href="/">Etusivulle</a>
+        <a href="/" class="btn">Etusivulle</a>
+        <form class="logout-form" th:action="@{/logout}" method="post">
+            <input type="submit" value="Logout" class="logout-button" />
+        </form>
     </header>
 
     <main>
         <section>
             <h2>Tuotteet</h2>
+            
+            <button sec:authorize="hasAuthority('ROLE_ADMIN')" onclick="location.href='addproduct'">Lisää uusi tuote</button>
+            
             <ul>
                 <li th:each="product : ${products}">
                     <h3 th:text="${product.productName}">Tuotteen nimi</h3>
                     <p><strong>Merkki:</strong> <span th:text="${product.brand}">Merkki</span></p>
                     <p><strong>Kuvaus:</strong> <span th:text="${product.description}">Kuvaus</span></p>
                     <p><strong>Ainesosat:</strong> <span th:text="${product.ingredients}">Ainesosat</span></p>
+
+                    <hr class="review-divider">
+                    <h4>Arvostelut:</h4>
+                    <div class="review-item" th:each="review : ${reviewsMap[product.id]}">
+                        <p><strong>Käyttäjä:</strong> <span th:text="${review.appUser.username}">Käyttäjänimi</span></p>
+                        <p><strong>Arvosana:</strong> <span th:text="${review.rating}">Arvosana</span></p>
+                        <p><strong>Kommentti:</strong> <span th:text="${review.comment}">Kommentti</span></p>
+
+                        <button 
+                            sec:authorize="hasAuthority('ROLE_ADMIN')" 
+                            th:onclick="|if(confirm('Oletko varma, että haluat poistaa arvostelun?')) location.href='/deleteproductreview/' + ${review.id};|">
+                            Poista arvostelu
+                        </button>
+                    </div>
+
+                    <button sec:authorize="hasAuthority('ROLE_ADMIN')" th:onclick="|location.href='/editproduct/' + ${product.id}|">Muokkaa tuotetta</button>
+                    <button sec:authorize="hasAuthority('ROLE_ADMIN')" 
+                        th:onclick="|if(confirm('Oletko varma, että haluat poistaa tuotteen?')) location.href='/deleteproduct/' + ${product.id};|">
+                        Poista tuote
+                    </button>
+
+
+                    <button th:onclick="|location.href='/addproductreview/' + ${product.id}|">Lisää arvostelu</button>
                 </li>
             </ul>
         </section>
-
-        <section>
-            <h2>Lisää uusi tuote</h2>
-            <form action="/submitProduct" method="post">
-                <label for="name">Tuotteen nimi:</label>
-                <input type="text" id="name" name="name" required>
-                <br>
-                <label for="brand">Merkki:</label>
-                <input type="text" id="brand" name="brand" required>
-                <br>
-                <label for="description">Kuvaus:</label>
-                <textarea id="description" name="description" required></textarea>
-                <br>
-                <label for="ingredients">Ainesosat:</label>
-                <textarea id="ingredients" name="ingredients" required></textarea>
-                <br>
-                <button type="submit">Tallenna</button>
-            </form>
-        </section>
     </main>
-
-    <section>
-        <h2>Tuotearvostelut</h2>
-        <ul>
-            <li th:each="review : ${reviews}">
-                <p><strong>Arvosana:</strong> <span th:text="${review.rating}"></span></p>
-                <p><strong>Kommentti:</strong> <span th:text="${review.comment}"></span></p>
-            </li>
-        </ul>
-    </section>
-    
 
     <footer>
         <p>&copy; 2024 Vegit - All rights reserved.</p>

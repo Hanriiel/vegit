@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Muokkaa reseptiä</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+    <h1>Muokkaa reseptiä</h1>
+    <div class="form-container">
+        <form th:action="@{/saveEditedRecipe}" th:object="${recipe}" method="post">
+            <input type="hidden" name="_method" value="put" />
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="form-group">
+                <label>Reseptin nimi</label>
+                <input type="text" th:field="*{recipeTitle}" required />
+                <div th:if="${#fields.hasErrors('recipeTitle')}" th:errors="*{recipeTitle}">Virhe</div>
+            </div>
+
+            <div class="form-group">
+                <label>Ainesosat</label>
+                <textarea th:field="*{ingredients}" required></textarea>
+                <div th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}">Virhe</div>
+            </div>
+
+            <div class="form-group">
+                <label>Valmistusohjeet</label>
+                <textarea th:field="*{instructions}" required></textarea>
+                <div th:if="${#fields.hasErrors('instructions')}" th:errors="*{instructions}">Virhe</div>
+            </div>
+
+            <div class="form-group">
+                <label>Valmistusaika (min)</label>
+                <input type="number" th:field="*{prepTime}" min="1" step="1" required />
+                <div th:if="${#fields.hasErrors('prepTime')}" th:errors="*{prepTime}">Virhe</div>
+            </div>
+
+            <div class="form-group">
+                <label>Annoksia</label>
+                <input type="number" th:field="*{servings}" min="1" step="1" required />
+                <div th:if="${#fields.hasErrors('servings')}" th:errors="*{servings}">Virhe</div>
+            </div>
+
+            <div class="submit-container">
+                <input type="submit" value="Tallenna" />
+                <button type="button" onclick="window.location.href='/recipes'">Peruuta</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

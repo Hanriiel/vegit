@@ -1,16 +1,20 @@
 package vegit.domain;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "product")
@@ -21,23 +25,26 @@ public class Product {
     @Column(name="product_id", nullable = false, updatable = false)
     private Long id;
     
+    @NotEmpty(message = "Tuotteen nimi ei voi olla tyhjä")
+    @Size(min = 2, max = 100, message = "Pituuden pitää olla 2-100 merkkiä")
     @Column(name="product_name", nullable = false)
     private String productName;
 
-    @Column(name="brand")
+    @Column(name="brand", nullable = false)
+    @NotEmpty(message = "Tuotteen merkki ei voi olla tyhjä")
+    @Size(min = 2, max = 100, message = "Pituuden pitää olla 2-100 merkkiä")
     private String brand;
 
     @Column(name="description")
+    @Size(min = 5, max = 500, message = "Pituuden pitää olla 5-500 merkkiä")
     private String description;
 
     @Column(name="ingredients", columnDefinition = "TEXT")
+    @Size(min = 5, max = 500, message = "Pituuden pitää olla 5-500 merkkiä")
     private String ingredients;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProductTag> productTags = new HashSet<>();
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RecipeProduct> recipeProducts = new HashSet<>();
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Review> reviews;
 
     public Product() {
     }
@@ -89,4 +96,5 @@ public class Product {
         this.ingredients = ingredients;
     }
 
+ 
 }

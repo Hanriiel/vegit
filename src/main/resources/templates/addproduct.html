@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lisää uusi tuote</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+    <h1>Lisää uusi vegaaninen tuote</h1>
+    <div>
+        <form th:object="${product}" th:action="@{/saveproduct}" method="post">
+            <div>
+                <label>Tuotteen nimi</label>
+                <input type="text" th:field="*{productName}" required />
+                <div th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}">Virhe</div>
+            </div>
+
+            <div>
+                <label>Merkki</label>
+                <input type="text" th:field="*{brand}" required />
+                <div th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}">Virhe</div>
+            </div>
+
+            <div>
+                <label>Kuvaus</label>
+                <textarea th:field="*{description}" required></textarea>
+                <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Virhe</div>
+            </div>
+
+            <div>
+                <label>Ainesosat</label>
+                <textarea th:field="*{ingredients}" required></textarea>
+                <div th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}">Virhe</div>
+            </div>
+
+            <input type="submit" value="Tallenna" />
+            <button type="button" onclick="window.location.href='/products'">Peruuta</button>
+        </form>
+    </div>
+</body>
+</html>
