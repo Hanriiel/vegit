@@ -3,6 +3,8 @@ package vegit;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import vegit.domain.Product;
 import vegit.domain.Recipe;
 import vegit.repository.ProductRepository;
@@ -34,6 +37,22 @@ public class VegitRestTests {
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
+    }
+
+    @BeforeAll
+    public static void setup() {
+        Dotenv dotenv = Dotenv.load();
+        String dbUsername = dotenv.get("DB_USERNAME");
+        String dbPassword = dotenv.get("DB_PASSWORD");
+        String databaseUrl = dotenv.get("DATABASE_URL");
+
+        if (dbUsername != null && dbPassword != null && databaseUrl != null) {
+            System.setProperty("spring.datasource.username", dbUsername);
+            System.setProperty("spring.datasource.password", dbPassword);
+            System.setProperty("spring.datasource.url", databaseUrl);
+        } else {
+            throw new IllegalStateException("Ympäristömuuttujat eivät toimi oikein.");
+        }
     }
 
     @Test
@@ -139,11 +158,5 @@ public class VegitRestTests {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().json("{\"recipeTitle\":\"Testiresepti\",\"ingredients\":\"Testiainekset\",\"instructions\":\"Testiohjeet\"}"));
     }   
-
-
-
-    
-
-   
 
 }

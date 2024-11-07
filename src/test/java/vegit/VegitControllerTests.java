@@ -1,10 +1,12 @@
 package vegit;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -23,6 +25,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = VegitApplication.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class VegitControllerTests {
+    
+    @BeforeAll
+    public static void setup() {
+        Dotenv dotenv = Dotenv.load();
+        String dbUsername = dotenv.get("DB_USERNAME");
+        String dbPassword = dotenv.get("DB_PASSWORD");
+        String databaseUrl = dotenv.get("DATABASE_URL");
+
+        if (dbUsername != null && dbPassword != null && databaseUrl != null) {
+            System.setProperty("spring.datasource.username", dbUsername);
+            System.setProperty("spring.datasource.password", dbPassword);
+            System.setProperty("spring.datasource.url", databaseUrl);
+        } else {
+            throw new IllegalStateException("Ympäristömuuttujat eivät toimi oikein.");
+        }
+    }
 
     @Autowired
     private ProductRepository productRepository;
@@ -39,7 +57,7 @@ public class VegitControllerTests {
     @Test
     void findByProductNameShouldReturnProduct() {
 
-        List<Product> products = productRepository.findByProductName("Linda Mccartney's Vegetarian Red Onion & Rosemary Sausages");
+        List<Product> products = productRepository.findByProductName("Linda Mccartney Vegetarian Red Onion & Rosemary Sausages");
         
         assertThat(products).hasSize(1);
         assertThat(products.get(0).getBrand()).isEqualTo("Midsona");
@@ -167,11 +185,5 @@ public class VegitControllerTests {
         assertThat(reviews.get(0).getProduct()).isEqualTo(product);
     }
     
-
-
-
-
-
-
 
 }

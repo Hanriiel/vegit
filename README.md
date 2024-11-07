@@ -5,6 +5,9 @@ Vegit on kasvisruokatuotteisiin ja resepteihin keskittyvä sovellus, jossa käyt
 
 Vegit tarjoaa myös mahdollisuuden lisätä reseptejä, joissa hyödynnetään kasvipohjaisia tuotteita sekä ja antaa niistä palautetta. Reseptit auttavat käyttäjiä kokeilemaan uusia raaka-aineita sekä löytämään uusia tapoja nauttia kasvisruuasta. Myös reseptejä voi arvostella ja muiden käyttäjien reseptiarvosteluja lukea.
 
+## Sovelluksen osoite
+Sovellus toimii osoitteessa https://vegit-db.onrender.com 
+
 ## Luokkakaavio
 Tämä luokkakaavio havainnollistaa sovelluksen rakennetta.
 
