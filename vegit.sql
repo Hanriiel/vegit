@@ -1,17 +1,18 @@
+DROP TABLE IF EXISTS REVIEW;
 DROP TABLE IF EXISTS recipe;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS app_user;
-DROP TABLE IF EXISTS REVIEW;
+
 
 CREATE TABLE app_user (
-    user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id SERIAL PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     passwordhash VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE product (
-    product_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    product_id SERIAL PRIMARY KEY,
     product_name VARCHAR(100) NOT NULL,
     brand VARCHAR(100) NOT NULL,
     description VARCHAR(500),
@@ -19,7 +20,7 @@ CREATE TABLE product (
 );
 
 CREATE TABLE recipe (
-    recipe_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    recipe_id SERIAL PRIMARY KEY,
     recipe_title VARCHAR(50) NOT NULL,
     ingredients TEXT,
     instructions TEXT,
@@ -28,7 +29,7 @@ CREATE TABLE recipe (
 );
 
 CREATE TABLE review (
-    review_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    review_id SERIAL PRIMARY KEY,
     rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
     product_id BIGINT,
