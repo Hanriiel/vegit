@@ -1,12 +1,10 @@
 package vegit;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -23,25 +21,9 @@ import vegit.repository.ReviewRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = VegitApplication.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
 public class VegitControllerTests {
     
-    @BeforeAll
-    public static void setup() {
-        Dotenv dotenv = Dotenv.load();
-        String dbUsername = dotenv.get("DB_USERNAME");
-        String dbPassword = dotenv.get("DB_PASSWORD");
-        String databaseUrl = dotenv.get("DATABASE_URL");
-
-        if (dbUsername != null && dbPassword != null && databaseUrl != null) {
-            System.setProperty("spring.datasource.username", dbUsername);
-            System.setProperty("spring.datasource.password", dbPassword);
-            System.setProperty("spring.datasource.url", databaseUrl);
-        } else {
-            throw new IllegalStateException("Ympäristömuuttujat eivät toimi oikein.");
-        }
-    }
-
     @Autowired
     private ProductRepository productRepository;
 
